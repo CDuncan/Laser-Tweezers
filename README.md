@@ -1,7 +1,7 @@
 # Laser-Tweezers
-This crop uses panda Data Structures
+This fork uses panda Data Structures
 
-Heres the packages I use
+Here are the packages I use in this fork 
 ```
 pip install matplotlib
 pip install scipy
