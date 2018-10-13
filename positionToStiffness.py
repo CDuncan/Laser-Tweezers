@@ -9,8 +9,8 @@ import matplotlib.pyplot as plt
 kBT = (273+21)*1.38064852E-23
 Hold = glob.glob("Raw/*.csv")
 
-File = 'Data/PositionDistribution.csv'
-Output = open(File,'w')
+OutputFilename = 'Data/PositionDistribution.csv'
+Output = open(OutputFilename,'w')
 Output.write('Filename,Stiffness x, Sku x, Stiffness y, Sku y\n')
 
 
