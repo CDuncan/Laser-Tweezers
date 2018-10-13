@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 
 def findDetails(FileName):
     DataLoc = 'Repo' + '\\' + 'Measurements.csv'
@@ -20,4 +21,21 @@ def findDensity(FileName):
     Density = float(Data.loc[fullData[0]])
     return Density
 
+def findPositions(FileName):
+    readFile = open(FileName,'r')
+    valX = []
+    valY = []
 
+    for line in readFile:
+        Split = line.split(',')
+        valX.append(float(Split[1]))
+        valY.append(float(Split[2]))
+
+    StrippedFile = FileName[4:]
+    StrippedFile = StrippedFile[:-4]
+    ScaleFactor = findScale(StrippedFile)
+
+    arrayValX = np.asarray(valX)*ScaleFactor
+    arrayValY = np.asarray(valY)*ScaleFactor
+
+    return StrippedFile, arrayValX, arrayValY

@@ -2,6 +2,9 @@ import glob
 import numpy as np
 import scipy.stats as sp
 import findDetails as FD
+import seaborn as sb
+import matplotlib.pyplot as plt
+
 
 line = []
 kBT = (273+21)*1.38064852E-23
@@ -13,21 +16,11 @@ Output.write('Filename,Stiffness x, Sku x, Stiffness y, Sku y\n')
 
 
 for file in Hold:
-    readFile = open(file,'r')
-    valX = []
-    valY = []
-    for line in readFile:
-        Split = line.split(',')
-        valX.append(float(Split[1]))
-        valY.append(float(Split[2]))
+    StrippedFile, arrayValX, arrayValY = FD.findPositions(file)
 
-    StrippedFile = file[4:]
-    StrippedFile = StrippedFile[:-4]
-    ScaleFactor = FD.findScale(StrippedFile)
-
-    arrayValX = np.asarray(valX)*ScaleFactor
-    arrayValY = np.asarray(valY)*ScaleFactor
-
+    #ax = sb.jointplot(x=arrayValX,y=arrayValY,kind="hex")
+    ax = sb.jointplot(x=arrayValX,y=arrayValY,kind="kde")
+    plt.show()
 
     SpringX = kBT/(np.nanvar(arrayValX))
     KurtX = sp.kurtosis(arrayValX)
