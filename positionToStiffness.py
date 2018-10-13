@@ -6,7 +6,6 @@ import seaborn as sb
 import matplotlib.pyplot as plt
 
 
-line = []
 kBT = (273+21)*1.38064852E-23
 Hold = glob.glob("Raw/*.csv")
 

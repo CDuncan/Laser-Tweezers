@@ -3,7 +3,6 @@ import numpy as np
 import findDetails as FD
 
 
-line = []
 
 
 Hold = glob.glob("Raw/*.csv")
