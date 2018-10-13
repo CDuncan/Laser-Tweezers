@@ -4,7 +4,7 @@ import seaborn as sb
 import matplotlib.pyplot as plt
 import findDetails as FD
 
-Filename = input('What is the filename?');
+Filename = input('What is the filename?')
 Directory = 'Data' + '\\' + Filename + '.csv'
 
 try:
