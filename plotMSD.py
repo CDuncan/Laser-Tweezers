@@ -39,10 +39,10 @@ if FileOpen:
     ttl.set_position([.5, 1.05])
 
 
-    plt.title(LabelTitle)
+    #plt.title(LabelTitle)
 
     fig = ax.get_figure()
-    fig.savefig("Figures\\" + Filename+".png")
+    fig.savefig("Figures\\MSD\\" + Filename+".png")
 
 
 
