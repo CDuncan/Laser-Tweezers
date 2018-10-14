@@ -21,23 +21,33 @@ for file in Hold:
     StrippedFile = StrippedFile[:-4]
     Details = FD.findDetails(StrippedFile)
 
-    # Convert to micrometres
-    microArrayValX = arrayValX*1e6
-    microArrayValY = arrayValY*1e6
+    # Convert to micrometres and set centre of graph
+    microArrayValX = (arrayValX-np.median(arrayValX))*1e6
+    microArrayValY = (arrayValY-np.median(arrayValY))*1e6
 
-    # Set centre of graph
-    CentreX = np.median(microArrayValX)
-    CentreY = np.median(microArrayValY)
+    # Calculate 
+    SpringX = kBT/(np.nanvar(arrayValX))
+    KurtX = sp.kurtosis(arrayValX)
+    SpringY = kBT/(np.nanvar(arrayValY))
+    KurtY = sp.kurtosis(arrayValY)
+
 
     # Plot graph and export as png
     LabelX = 'x position ($um$)'
     LabelY = 'y position ($um$)'
     LabelTitle = "Position density for " + str(Details[1]) +"$um$ " + str(Details[0]) + " beads. " + str(Details[4]) + " motion."
-    ax = sb.jointplot(x=microArrayValX,y=microArrayValY,kind="kde",xlim=[CentreX-0.15,CentreX+0.15],ylim=[CentreY-0.15,CentreY+0.15])
-    ax.set_axis_labels(xlabel=LabelX,ylabel=LabelY)
-    ax.fig.suptitle(LabelTitle)
-    ax.fig.subplots_adjust(top=0.9)
-    ax.savefig("Export/Figures/Position/" + StrippedFile+".png")
+    sb.set()
+    graph = sb.jointplot(x=microArrayValX,y=microArrayValY,kind="kde",xlim=[-0.15,+0.15],ylim=[-0.15,+0.15],shade_lowest=False)
+    graph.set_axis_labels(xlabel=LabelX,ylabel=LabelY)
+    graph.fig.suptitle(LabelTitle)
+    graph.fig.subplots_adjust(top=0.9)
+    Data = [['%.2e' % SpringX, '%.2e' % SpringY],['%.2f' % KurtX, '%.2f' % KurtY]]
+    cols = ['X','Y']
+    rows = ['Spring','Kurtosis']
+
+    graph.ax_joint.table(cellText=Data,loc="best",colLabels=cols,rowLabels=rows,cellLoc="right",clip_on=True,zorder=1000,colWidths=[0.25]*2)
+
+    graph.savefig("Export/Figures/Position/" + StrippedFile+".png")
 
     # Calculate 
     SpringX = kBT/(np.nanvar(arrayValX))

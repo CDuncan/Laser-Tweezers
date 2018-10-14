@@ -34,15 +34,16 @@ if FileOpen:
     LabelX = 'Time ($s$)'
     LabelY = 'MSD ($m^2$)'
     LabelTitle = "MSD vs time for " + str(Details[1]) +"$um$ " + str(Details[0]) + " beads. " + str(Details[4]) + " motion at " + str(Details[5]) +" FPS"
-    ax.set(xlabel=LabelX, ylabel=LabelY, xlim=(0,None), ylim=(0, None)) 
+    ax.set(xlabel=LabelX, ylabel=LabelY, xlim=(0,None)) 
+    ax.set(yscale="log")
     ttl = ax.title
     ttl.set_position([.5, 1.05])
 
 
-    #plt.title(LabelTitle)
+    plt.show()
 
-    fig = ax.get_figure()
-    fig.savefig("Export/Figures/MSD/" + Filename + ".png")
+    #fig = ax.get_figure()
+    #fig.savefig("Export/Figures/MSD/" + Filename + ".png")
 
 
 
