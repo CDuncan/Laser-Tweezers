@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import findDetails as FD
 
 Filename = input('What is the filename?')
-Directory = 'Data' + '\\' + Filename + '.csv'
+Directory = 'Data/' + Filename + '.csv'
 
 try:
     Data = pd.read_csv(Directory,header=0,index_col=False)
@@ -42,7 +42,7 @@ if FileOpen:
     #plt.title(LabelTitle)
 
     fig = ax.get_figure()
-    fig.savefig("Figures\\MSD\\" + Filename+".png")
+    fig.savefig("Export/Figures/MSD/" + Filename + ".png")
 
 
 
