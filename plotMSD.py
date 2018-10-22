@@ -4,7 +4,7 @@ import seaborn as sb
 import matplotlib.pyplot as plt
 import findDetails as FD
 import glob
-from scipy import optimize
+from scipy import stats
 
 #Filename = input('What is the filename?')
 #Directory = 'Export/MSD/' + Filename + '.csv'
@@ -13,19 +13,19 @@ Hold = glob.glob("Export/MSD/*.csv")
 
 OutputFilename = 'Export/MSDFlat.csv'
 Output = open(OutputFilename,'w')
-Output.write('Filename,Power,Stiffness x,Stiffness y\n')
+Output.write('Filename,Power,Stiffness x,Stiffness y,rX,rY\n')
 
 
 for file in Hold:
 
     try:
-        StrippedFile = file[11:]
-        StrippedFile = StrippedFile[:-4]
+        StrippedFile = FD.findFileName(file)
+
 
         Data = pd.read_csv(file,header=0,index_col=False)
         Details = FD.findDetails(StrippedFile)
-        Data = Data.truncate(before=0,after=len(Data)*0.8)
 
+        Data = Data.truncate(before=15,after=len(Data)*0.8)
 
         Data.loc[:,'Frame Diff']/= Details[5]
         Data.rename(columns={'Frame Diff': 'Time (seconds)'}, inplace=True)
@@ -59,15 +59,12 @@ for file in Hold:
         xData = Data["MSD x"].tolist()
         yData = Data["MSD y"].tolist()
 
-
-        def test_func(x,a):
-            return a
-        params, params_covariance = optimize.curve_fit(test_func, time, xData, p0=[1e-15])
-        params2, params_covariance2 = optimize.curve_fit(test_func, time, yData, p0=[1e-15])
-
+        slopeX, interceptX, r_valueX, p_valueX, std_errX = stats.linregress(time, xData)
+        slopeY, interceptY, r_valueY, p_valueY, std_errY = stats.linregress(time, yData)
 
         if (str(Details[4]) == "Trapped"):
-            Output.write(StrippedFile +','+ str(Details[7]) +','+ str(params[0]) + ',' + str(params2[0])+ '\n')
+            Output.write(StrippedFile +','+ str(Details[7]) +','+ str(interceptX) + ',' + str(interceptY)+ ',' +  str(r_valueX) + ','+ str(r_valueY)+  '\n')
+
 
         #plt.show()
 
