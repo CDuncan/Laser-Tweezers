@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 
 
 kBT = (273+21)*1.38064852E-23
-Hold = glob.glob("Raw/*.csv")
+Hold = glob.glob("Raw/Positions/*.csv")
 
 OutputFilename = 'Export/PositionDistribution.csv'
 Output = open(OutputFilename,'w')
@@ -17,8 +17,6 @@ Output.write('Filename,Stiffness x, Sku x, Stiffness y, Sku y\n')
 for file in Hold:
     StrippedFile, arrayValX, arrayValY = FD.findPositions(file)
 
-    StrippedFile = file[4:]
-    StrippedFile = StrippedFile[:-4]
     Details = FD.findDetails(StrippedFile)
 
     # Convert to micrometres and set centre of graph
@@ -35,7 +33,12 @@ for file in Hold:
     # Plot graph and export as png
     LabelX = 'x position ($um$)'
     LabelY = 'y position ($um$)'
-    LabelTitle = "Position density for " + str(Details[1]) +"$um$ " + str(Details[0]) + " beads. " + str(Details[4]) + " motion."
+    Size = '%.3f' % Details[1]
+    if Details[7]!= "N/A":
+        LabelTitle = "Position density for " + str(Size) +"$um$ " + str(Details[0]) + " beads. " + str(Details[4]) + " motion at " + str(Details[7]) +"."
+    else:
+        LabelTitle = "Position density for " + str(Size) +"$um$ " + str(Details[0]) + " beads. " + str(Details[4]) + " motion."
+
     sb.set()
     graph = sb.jointplot(x=microArrayValX,y=microArrayValY,kind="kde",xlim=[-0.15,+0.15],ylim=[-0.15,+0.15],shade_lowest=False)
     graph.set_axis_labels(xlabel=LabelX,ylabel=LabelY)
@@ -47,13 +50,8 @@ for file in Hold:
 
     graph.ax_joint.table(cellText=Data,loc="best",colLabels=cols,rowLabels=rows,cellLoc="right",clip_on=True,zorder=1000,colWidths=[0.25]*2)
 
-    graph.savefig("Export/Figures/Position/" + StrippedFile+".png")
-
-    # Calculate 
-    SpringX = kBT/(np.nanvar(arrayValX))
-    KurtX = sp.kurtosis(arrayValX)
-    SpringY = kBT/(np.nanvar(arrayValY))
-    KurtY = sp.kurtosis(arrayValY)
-
-    
-    Output.write(StrippedFile +','+ str(SpringX) +','+ str(KurtX) + ',' + str(SpringY)+','+ str(KurtY)+'\n')
+    if (str(Details[4]) == "Trapped"):
+        graph.savefig("Export/Figures/Position/" + StrippedFile+".png")
+        Output.write(StrippedFile +','+ str(SpringX) +','+ str(KurtX) + ',' + str(SpringY)+','+ str(KurtY)+'\n')
+    plt.close(fig='all')
+    print(' File: ' + str(StrippedFile) + '  ',end='\r')

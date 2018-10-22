@@ -31,7 +31,7 @@ def findPositions(FileName):
         valX.append(float(Split[1]))
         valY.append(float(Split[2]))
 
-    StrippedFile = FileName[4:]
+    StrippedFile = FileName[14:]
     StrippedFile = StrippedFile[:-4]
     ScaleFactor = findScale(StrippedFile)
 

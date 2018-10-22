@@ -5,11 +5,11 @@ import findDetails as FD
 
 
 
-Hold = glob.glob("Raw/*.csv")
+Hold = glob.glob("Raw/Positions/*.csv")
 for file in Hold:
     StrippedFile, arrayValX, arrayValY = FD.findPositions(file)
     
-    OutFile = "Data" + file[3:]
+    OutFile = "Export/MSD/" + StrippedFile + '.csv'
     Output = open(OutFile,'w')
     Output.write('Frame Diff,MSD x,MSD y\n')
 
@@ -27,3 +27,4 @@ for file in Hold:
         MeanY = SumY/Count
         
         Output.write(str(i) +','+ str(MeanX) +','+ str(MeanY) +'\n')
+        print(' File: ' + str(StrippedFile) + '  ',end='\r')
